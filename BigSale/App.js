@@ -19,9 +19,9 @@ export default function App() {
     
     (async () => {
       animateTitle();
-    //const deals = await api.fetchInitialDeals();
+    const deals = await api.fetchInitialDeals();
     //console.info(deals);
-    //setDeals(deals);
+    setDeals(deals);
   })();
   }, []);
 
@@ -36,16 +36,26 @@ export default function App() {
         toValue: direction * width,
         duration: 1000,
         easing: Easing.linear,
-      }).start(()=> animateTitle(direction * -1));
+        useNativeDriver: false,
+      }).start(({finished})=>{
+        if (finished){
+      
+       animateTitle(direction * -1)
+        }
+      });
     };
     
       return (
     <>
       {
         currentDealId ? (
-          <Detail deal={getCurrentDeal()} onBack={unsetCurrentDealId}/>
+          <View style={styles.main}>
+            <Detail deal={getCurrentDeal()} onBack={unsetCurrentDealId}/>
+          </View>
         ) : deals.length > 0 ? (
-          <Deals deals= {deals} onItemPress={setCurrentDealId}/>
+          //<View style={styles.main} >
+              <Deals deals= {deals} onItemPress={setCurrentDealId}/>
+          //</View>
         ) : (
           <Animated.View style={[ {left: titleXPos}, styles.container]}>
               <Text style={styles.header}>Big Sale App!!</Text>
@@ -68,5 +78,8 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 40
+  },
+  main: {
+    marginTop:50,
   }
 });
