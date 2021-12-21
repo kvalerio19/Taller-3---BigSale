@@ -18,6 +18,13 @@ export default Detail = ({deal, onBack}) =>{
         })();
     } , []);
 
+    useEffect(()=> {
+        Animated.spring(imageXpos, {
+            toValue: 0,
+            useNativeDriver: false,
+        }).start();
+    }, [imageIndex]);
+
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: ()=> true,
         onPanResponderMove: (e, state) => imageXpos.setValue(state.dx),
@@ -34,7 +41,7 @@ export default Detail = ({deal, onBack}) =>{
                     console.log('direction', direction);
                     console.log('next', imageIndex + direction * -1);
                     console.log('image', Object.values(dealDetail.media)[imageIndex + direction * -1]);
-                    if (Object.values(dealDetail.media)[imageIndex +direction *-1]){
+                    if (Object.values(dealDetail.media)[imageIndex + direction *-1]){
                         setImageIndex(()=> imageIndex + direction *-1);
                         imageXpos.setValue(width * direction * -1);
                     }else{
